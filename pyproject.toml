@@ -3,6 +3,8 @@ name = "barnes-hut-sim"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "astropy>=8.0.2",
+    "astroquery>=0.4.11",
     "duckdb>=2.0.0",
     "polars[pyarrow]>=2.0.0",
     "viser>=1.1.1",
