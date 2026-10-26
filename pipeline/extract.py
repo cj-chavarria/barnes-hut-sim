@@ -1,4 +1,4 @@
-from astropy.table.table import Table
+from astropy.table import Table
 from astroquery.gaia import Gaia
 
 from utils.read_query import query
@@ -10,3 +10,9 @@ def extract_gaia_tbl() -> Table:
 
     tbl: Table = job.get_results()
     return tbl
+
+
+if __name__ == "__main__":
+    gaia_table = extract_gaia_tbl()
+    print(gaia_table)
+    gaia_table.write("data/test.parquet")
