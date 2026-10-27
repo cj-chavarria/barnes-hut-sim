@@ -1,10 +1,10 @@
 import astropy.coordinates as coord
 import astropy.units as u
-from astropy.coordinates.sky_coordinate import SkyCoord
-from astropy.table import QTable, Table
+import polars as pl
+from astropy.table import Table
 
 
-def to_skycoord(gaia_tbl: Table) -> SkyCoord:
+def to_skycoord(gaia_tbl: Table) -> coord.SkyCoord:
     return coord.SkyCoord(
         ra=u.Quantity(gaia_tbl["ra"], unit=u.deg),
         dec=u.Quantity(gaia_tbl["dec"], unit=u.deg),
@@ -16,8 +16,7 @@ def to_skycoord(gaia_tbl: Table) -> SkyCoord:
     ).transform_to(coord.Galactocentric)
 
 
-if __name__ == "__main__":
-    tbl = Table.read("data/test.parquet")
-    sky_coord = to_skycoord(tbl).to_table()
-    print(type(sky_coord))
-    print(sky_coord)
+def astroparams(gaia_tbl: Table) -> pl.DataFrame:
+    df = pl.DataFrame()
+
+    return df

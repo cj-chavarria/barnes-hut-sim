@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.14"
 resolution-markers = [
     "sys_platform == 'win32'",
@@ -65,6 +65,7 @@ dependencies = [
     { name = "astropy" },
     { name = "astroquery" },
     { name = "duckdb" },
+    { name = "pandas" },
     { name = "polars", extra = ["pyarrow"] },
     { name = "viser" },
 ]
@@ -79,6 +80,7 @@ requires-dist = [
     { name = "astropy", specifier = ">=8.0.2" },
     { name = "astroquery", specifier = ">=0.4.11" },
     { name = "duckdb", specifier = ">=2.0.0" },
+    { name = "pandas", specifier = ">=3.1.0" },
     { name = "polars", extras = ["pyarrow"], specifier = ">=2.0.0" },
     { name = "viser", specifier = ">=1.1.1" },
 ]
