@@ -1,5 +1,5 @@
 import os
-from typing import Literal
+from dataclasses import dataclass
 
 import duckdb
 from dotenv import load_dotenv
@@ -7,22 +7,43 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class Settings:
-    def __init__(self) -> None:
-        self.db_backend: str | None = os.getenv("DB_BACKEND", "local")
-        self.simulation_backend: str | None = os.getenv("SIMULATION_BACKEND", "local")
+@dataclass(frozen=True)
+class Config:
+    db_backend: str = os.getenv("DB_BACKEND", "local")
+    simulation_backend: str = os.getenv("SIMULATION_BACKEND", "local")
 
-        print(self.db_backend)
+    bucket_name: str | None = os.getenv("R2_BUCKET_NAME")
+    key_id: str | None = os.getenv("R2_ACCESS_KEY_ID")
+    accound_id: str | None = os.getenv("R2_ACCOUNT_ID")
+    secret: str | None = os.getenv("R2_SECRET_ACCESS_KEY")
 
-    @staticmethod
-    def is_local(backend: Literal["local", "cloud"]) -> bool:
-        return backend == "local"
+    def __post__init(self) -> None:
+        if self.db_backend or self.simulation_backend not in ("local", "cloud"):
+            raise ValueError
 
-    def duckdb_conn(self) -> duckdb.DuckDBPyConnection:
+    @property
+    def db_conn(self) -> duckdb.DuckDBPyConnection:
         conn = duckdb.connect()
-        conn.execute("INSTALL AND LOAD httpfs")
+        if self.db_backend == "cloud":
+            conn.execute(
+                f"""
+                CREATE SECRET (
+                    TYPE r2,
+                    KEY_ID '{self.key_id}',
+                    SECRET '{self.secret}',
+                    ACCOUNT_ID '{self.accound_id}'
+                    );
+                """
+            )
+            try:
+                conn.sql(f"SELECT * FROM glob('r2://{self.bucket_name}/*')")
+            except duckdb.HTTPException, duckdb.IOException:
+                conn.close()
+                return duckdb.connect()
 
         return conn
 
 
-Settings()
+cfg = Config()
+
+ddb_conn = cfg.db_conn

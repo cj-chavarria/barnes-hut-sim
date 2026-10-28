@@ -46,5 +46,4 @@ def astro_params(gaia_tbl: pl.DataFrame) -> pl.DataFrame:
 
 
 if __name__ == "__main__":
-    table = Table.read("data/test.parquet").to_df("polars")
-    print(astro_params(table))
+    print(type(sett.test_func))
