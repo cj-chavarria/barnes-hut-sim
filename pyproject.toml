@@ -9,6 +9,7 @@ dependencies = [
     "narwhals>=2.28.0",
     "pandas>=3.1.0",
     "polars[pyarrow]>=2.0.0",
+    "prefect>=3.9.0",
     "python-dotenv>=1.2.4",
     "viser>=1.1.1",
 ]
