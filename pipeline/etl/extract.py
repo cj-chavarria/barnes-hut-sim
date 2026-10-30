@@ -9,9 +9,3 @@ def extract_gaia_tbl(n_stars: int) -> Table:
     job = Gaia.launch_job_async(query=q)
     tbl = job.get_results()
     return tbl
-
-
-if __name__ == "__main__":
-    gaia_table = extract_gaia_tbl(n_stars=10)
-    print(gaia_table)
-    gaia_table.write("data/test.parquet", overwrite=True)
